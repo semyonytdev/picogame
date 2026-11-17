@@ -834,14 +834,14 @@
         }
         /* падающий снег: один слой, двигается только transform (дёшево для телефона) */
         #modal-pass .modal-content::after {
-            content: ''; position: absolute; left: 0; right: 0; top: -180px; bottom: 0;
+            content: ''; position: absolute; left: 0; right: 0; top: -60px; bottom: 0;
             pointer-events: none; z-index: 1; opacity: .85;
             background:
                 radial-gradient(circle, #fff 1.6px, transparent 2.2px) 0 0 / 60px 60px,
-                radial-gradient(circle, rgba(255,255,255,.8) 1px, transparent 1.7px) 25px 30px / 45px 45px;
-            animation: picoSnow 12s linear infinite;
+                radial-gradient(circle, rgba(255,255,255,.8) 1px, transparent 1.7px) 25px 30px / 60px 60px;
+            animation: picoSnow 5s linear infinite;
         }
-        @keyframes picoSnow { to { transform: translateY(180px); } }
+        @keyframes picoSnow { to { transform: translateY(60px); } }
         @media (prefers-reduced-motion: reduce) { #modal-pass .modal-content::after { animation: none; } }
         #modal-pass .close-btn { z-index: 5; }
         .pass-season-banner {
@@ -1545,7 +1545,7 @@
                 <div style="background: #fff; border: 2px solid #000; padding: 5px;">
                     <div id="season-active-content">
                         <div style="font-size: 10px; font-weight:bold; color:#000;"><span id="ui-season-num-text">4-й сезон</span> <span id="season-timer">-- д. -- ч.</span></div>
-                        <div id="ui-season-title" style="font-size: 12px; font-weight:bold; color:#39ff6a;">НОЧЬ PICO</div>
+                        <div id="ui-season-title" style="font-size: 12px; font-weight:bold; color:#39ff6a;">СНЕЖКИ 🌼</div>
                     </div>
                     <div id="season-ended-content" style="display:none;">
                         <div style="font-size: 12px; font-weight:bold; color:#000;">Сезон скоро появится.</div>
@@ -2662,7 +2662,7 @@
 
         const translations = {
             ru: {
-                chooseNick: "Выбрать ник", seasonText: "4-й сезон", megaSummer: "НОЧЬ PICO", passSeasonEnd: "Сезон завершается 17 декабря", passTimeLeft: "осталось",
+                chooseNick: "Выбрать ник", seasonText: "4-й сезон", megaSummer: "СНЕЖКИ 🌼", passSeasonEnd: "Сезон завершается 17 декабря", passTimeLeft: "осталось",
                 coins: "Монеты: ", gems: "Гемы: ", shop: "🏬 Магазин", brawlers: "😎 Бойцы", daily: "📅 ЕЖЕД.\nНАГРАДЫ",
                 modeShowdown: "Одиночное столкновение", modeTraining: "Режим: Тренировка", modeDuo: "Режим: Двойное столкновение", modeTeam: "Режим: КОМАНДНЫЙ БОЙ",
                 modeDuels: "Режим: Дуэли", modeCandyHunt: "Режим: 🍬 Охота за конфетами",
@@ -2710,7 +2710,7 @@
                 ]
             },
             en: {
-                chooseNick: "Choose Nick", seasonText: "Season 4", megaSummer: "PICO NIGHT", passSeasonEnd: "Season ends December 17", passTimeLeft: "left",
+                chooseNick: "Choose Nick", seasonText: "Season 4", megaSummer: "SNOWBALLS 🌼", passSeasonEnd: "Season ends December 17", passTimeLeft: "left",
                 coins: "Coins: ", gems: "Gems: ", shop: "🏬 Shop", brawlers: "😎 Brawlers", daily: "📅 Daily Rewards",
                 modeShowdown: "Solo Showdown", modeTraining: "Mode: Training", modeDuo: "Mode: Duo Showdown",
                 modeDuels: "Mode: Duels", modeCandyHunt: "Mode: 🍬 Candy Hunt",
@@ -2753,7 +2753,7 @@
                 ]
             },
             de: {
-                chooseNick: "Spitzname wählen", seasonText: "Saison 4", megaSummer: "PICO-NACHT", passSeasonEnd: "Die Saison endet am 17. Dezember", passTimeLeft: "noch",
+                chooseNick: "Spitzname wählen", seasonText: "Saison 4", megaSummer: "SCHNEEBÄLLE 🌼", passSeasonEnd: "Die Saison endet am 17. Dezember", passTimeLeft: "noch",
                 coins: "Münzen: ", gems: "Juwelen: ", shop: "🏬 Shop", brawlers: "😎 Brawler", daily: "📅 Tägliche Belohnungen",
                 modeShowdown: "Modus: Showdown", modeTraining: "Modus: Training", modeDuo: "Modus: Duo-Showdown",
                 play: "SPIELEN", settTitle: "Einstellungen", settLang: "Sprache", settDevice: "Gerätetyp",
@@ -2788,7 +2788,7 @@
                 ]
             },
             uk: {
-                chooseNick: "Обрати нік", seasonText: "4-й сезон", megaSummer: "НІЧ PICO", passSeasonEnd: "Сезон завершується 17 грудня", passTimeLeft: "залишилось",
+                chooseNick: "Обрати нік", seasonText: "4-й сезон", megaSummer: "СНІЖКИ 🌼", passSeasonEnd: "Сезон завершується 17 грудня", passTimeLeft: "залишилось",
                 coins: "Монети: ", gems: "Геми: ", shop: "🏬 Магазин", brawlers: "😎 Бійці", daily: "📅 Щоденні нагороди",
                 modeShowdown: "Режим: Зіткнення", modeTraining: "Режим: Тренування", modeDuo: "Режим: Подвійне зіткнення",
                 play: "ГРАТИ", settTitle: "Налаштування", settLang: "Мова", settDevice: "Тип пристрою",
@@ -9119,13 +9119,15 @@
             let rowEl = document.getElementById('daily-cards-row');
             if (rowEl) {
                 let curIdx = ((data.dailyDay || 1) - 1 + DAILY_REWARDS.length) % DAILY_REWARDS.length;
-                rowEl.innerHTML = DAILY_REWARDS.map((r, i) => {
+                let _rowHtml = DAILY_REWARDS.map((r, i) => {
                     let isCurrent = i === curIdx && !claimedToday;
                     let isPast = i < curIdx || (i === curIdx && claimedToday);
                     let cls = 'daily-card' + (isCurrent ? ' current' : '') + (isPast ? ' claimed' : '') + (r.bonus ? ' bonus' : '');
                     let bonusLbl = r.bonus ? `<div class="daily-card-bonus-label">${t.dailyBonusLabel || 'БОНУС!!!'}</div>` : '';
                     return `<div class="${cls}">${bonusLbl}<div class="daily-imba-text daily-imba-text-sm">${r.amount}</div><div class="daily-card-icon">${r.icon}</div></div>`;
                 }).join('');
+                // Перерисовываем только если что-то реально изменилось (раньше — каждую секунду, это лагало и сбрасывало анимации)
+                if (rowEl._lastHtml !== _rowHtml) { rowEl._lastHtml = _rowHtml; rowEl.innerHTML = _rowHtml; }
             }
 
             let quoteEl = document.getElementById('daily-quote');

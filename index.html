@@ -4231,7 +4231,7 @@
         // Модельки строятся кодом (three.js), а самая тяжёлая часть — их отрисовка в иконки.
         // В режиме экономии готовые иконки сохраняются в IndexedDB, а на экране загрузки
         // игра быстро поднимает их из базы и дорисовывает недостающие — к меню всё уже готово.
-        function picoLite() { try { return localStorage.getItem('pico_lite') === '1'; } catch (e) { return false; } }
+        function picoLite() { try { if (localStorage.getItem('pico_lite') === null && /iPhone|iPad|iPod/.test(navigator.userAgent)) localStorage.setItem('pico_lite', '1'); return localStorage.getItem('pico_lite') === '1'; } catch (e) { return false; } }
         function picoVer() { try { return 'v' + APP_VERSION; } catch (e) { return 'v0'; } }
         function picoIdb() {
             if (window._picoIdbP) return window._picoIdbP;
@@ -12295,7 +12295,12 @@
 <script>
 /* Режим экономии: без анимаций и теней, сохраняется на устройстве */
 function applyLite() {
-    var on = false; try { on = localStorage.getItem('pico_lite') === '1'; } catch (e) {}
+    var on = false; try {
+        var v = localStorage.getItem('pico_lite');
+        // На iPhone/iPad режим экономии включается сам при первом запуске (Safari перезагружал страницу от анимаций)
+        if (v === null && /iPhone|iPad|iPod/.test(navigator.userAgent)) { localStorage.setItem('pico_lite', '1'); v = '1'; }
+        on = v === '1';
+    } catch (e) {}
     document.body.classList.toggle('lite', on);
     var b = document.getElementById('btn-toggle-lite');
     if (b) { b.innerText = on ? 'ВКЛ' : 'ВЫКЛ'; b.className = on ? 'btn-flat btn-green' : 'btn-flat btn-red'; }
